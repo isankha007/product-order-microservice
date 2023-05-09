@@ -4,6 +4,7 @@ package com.sankha.orderservice.controller;
 import com.sankha.orderservice.dto.OrderRequest;
 import com.sankha.orderservice.service.OrderService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,13 +23,14 @@ public class OrderController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @CircuitBreaker(name = "inventory", fallbackMethod = "fallbackMethod")
-    public  String placeOrder(@RequestBody OrderRequest orderRequest){
-        orderService.placeOrder(orderRequest);
-        return "Order Placed Successfully";
+    @TimeLimiter(name = "inventory")
+    public  CompletableFuture<String> placeOrder(@RequestBody OrderRequest orderRequest){
+
+        return CompletableFuture.supplyAsync(()->orderService.placeOrder(orderRequest));
     }
 
-    public String fallbackMethod(@RequestBody OrderRequest orderRequest,RuntimeException runtimeException){
-        return "Ooops Something went wrong......";
+    public  CompletableFuture<String> fallbackMethod(@RequestBody OrderRequest orderRequest,RuntimeException runtimeException){
+        return CompletableFuture.supplyAsync(()->"Ooops Something went wrong......");
     }
 
 
