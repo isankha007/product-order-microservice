@@ -27,6 +27,20 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: http://localhost:8282/realms/spring-boot-microservices-realm-2
+management:
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411
+
+  tracing:
+    sampling:
+      probability: 1.0
+
+      # Actuator Prometheus Endpoint
+  endpoints:
+    web:
+      exposure:
+        include: "*"
 
 
 
@@ -46,3 +60,6 @@ logging:
     org.springframework.cloud.gateway: TRACE
 server:
   port: 8090
+
+
+

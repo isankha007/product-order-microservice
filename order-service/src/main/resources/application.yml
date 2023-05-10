@@ -25,9 +25,17 @@ management:
     web:
       exposure:
         include: "*"
+
   endpoint:
     health:
       show-details: always
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+
+  tracing:
+    sampling:
+      probability: 1.0
 
 
 #  resilience4j.circuitbreaker.instances.inventory.event-consumer-buffer-size=10
@@ -50,7 +58,13 @@ resilience4j:
         waitDurationInOpenState: 5s
         permittedNumberOfCallsInHalfOpenState: 3
         automaticTransitionFromOpenToHalfOpenEnabled: true
+  retry:
+    instances:
+      inventory:
+        maxAttempts: 3
   timelimiter:
     instances:
       inventory:
         timeoutDuration: 3s
+
+
