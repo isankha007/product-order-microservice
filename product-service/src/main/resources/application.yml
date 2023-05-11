@@ -6,7 +6,7 @@ spring:
   application:
     name: product-service
 server:
-  port: 0 #8989
+  port: 8989
 
 eureka:
   client:

@@ -1,0 +1,37 @@
+management:
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411
+
+  tracing:
+    sampling:
+      probability: 1.0
+
+      # Actuator Prometheus Endpoint
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka:password@localhost:8761/eureka
+
+
+spring:
+  application:
+    name: notification-service
+  kafka:
+    bootstrap-servers: localhost:9092
+    template:
+      default-topic: notificationTopic
+    consumer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      group-id: notificationId
+    properties:
+      "[spring.json.type.mapping]": event:com.sankha.OrderPlacedEvent
+
+server:
+  port: 0

@@ -8,9 +8,21 @@ spring:
       ddl-auto: update
   application:
     name: order-service
+  kafka:
+    bootstrap-servers: localhost:9092
+    template:
+      default-topic: notificationTopic
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        "[spring.json.type.mapping]": event:com.sankha.orderservice.events.OrderPlacedEvent
+#        spring:
+#          json:
+#            type:
+#              mapping: event:com.programmingtechie.orderservice.event.OrderPlacedEvent
 server:
-  port: 9090
-
+  port: 9080
 eureka:
   client:
     service-url:
